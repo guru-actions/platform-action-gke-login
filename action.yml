@@ -1,0 +1,25 @@
+# action.yml
+apiVersion: automation.cloudbees.io/v1alpha1
+kind: action
+name: 'Hello World'
+description: 'Greet someone and record the time'
+inputs:
+  who-to-greet:  # id of input
+    description: 'Who to greet'
+    required: true
+    default: 'World'
+outputs:
+  time: # id of output
+    description: 'The time we greeted you'
+runs:
+  using: composite
+  steps:
+    - id: execute
+      name: "execute the entry point script"
+      uses: docker://alpine:3.10
+      run: |
+        echo "Hello $WHO"
+        printf %s "11:11:11" > $CLOUDBEES_OUTPUTS/time
+      env:
+        WHO: ${{ inputs.who-to-greet }}
+
