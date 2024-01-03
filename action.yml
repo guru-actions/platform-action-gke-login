@@ -1,7 +1,7 @@
 # action.yml
 apiVersion: automation.cloudbees.io/v1alpha1
 kind: action
-name: 'hello-world'
+name: 'platform-action-hello'
 description: 'Greet someone and record the time'
 inputs:
   who-to-greet:  # id of input
