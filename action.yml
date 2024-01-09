@@ -23,14 +23,14 @@ inputs:
 runs:
   using: composite
   steps:
-    - id: download key file
+    - id: download-key-file
       uses: cloudbees-io/s3-download-object@v1
       name: Prepare env
       with:
         bucket-name: cb-se-workspace-caching-demo
         file-path: ${{ inputs.keyfile }}
         s3-path: testCNP/test.json
-    - id: execute
+    - id: login
       name: "login using service account and key file" 
       uses: docker://poseidon1979/gcloud-kubectl-image:latest
       run: |
