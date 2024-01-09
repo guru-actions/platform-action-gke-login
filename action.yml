@@ -1,25 +1,40 @@
 # action.yml
 apiVersion: automation.cloudbees.io/v1alpha1
 kind: action
-name: 'platform-action-hello'
-description: 'Greet someone and record the time'
+name: 'platform-action-gke-login'
+description: 'login to a gke cluster through gcp accounts'
 inputs:
-  who-to-greet:  # id of input
-    description: 'Who to greet'
+  service-account:  # gcp service account
+    description: 'service account'
     required: true
-    default: 'World'
-outputs:
-  time: # id of output
-    description: 'The time we greeted you'
+  key-file: # key file used for login
+    description: 'key file for the service account'
+    required: true
+  project: 
+    description: 'the name of the gcp project'
+    required: true
+  cluster-name: 
+    description: 'the name of the gke cluster'
+    required: true
+  zone: 
+    description: 'the zone of the gke cluster'
+    required: true
+
 runs:
   using: composite
   steps:
+    - id: download key file
+      uses: cloudbees-io/s3-download-object@v1
+      name: Prepare env
+      with:
+        bucket-name: cb-se-workspace-caching-demo
+        file-path: ${{ inputs.keyfile }}
+        s3-path: testCNP/test.json
     - id: execute
-      name: "execute the entry point script"
-      uses: docker://alpine:3.10
+      name: "login using service account and key file" 
+      uses: docker://poseidon1979/gcloud-kubectl-image:latest
       run: |
-        echo "Hello $WHO"
-        printf %s "11:11:11" > $CLOUDBEES_OUTPUTS/time
-      env:
-        WHO: ${{ inputs.who-to-greet }}
+        gcloud auth activate-service-account ${{ inputs.service-account }} --key-file=${{ inputs.keyfile }} --project=${{ inputs.project }}; 
+        gcloud container clusters get-credentials ${{ inputs.cluster-name }} --zone {{ inputs.zone }} --project ${{ inputs.project }}; 
+
 
