@@ -35,6 +35,6 @@ runs:
       uses: docker://poseidon1979/gcloud-kubectl-image:latest
       run: |
         gcloud auth activate-service-account ${{ inputs.service-account }} --key-file=${{ inputs.key-file }} --project=${{ inputs.project }}; 
-        gcloud container clusters get-credentials ${{ inputs.cluster-name }} --zone {{ inputs.zone }} --project ${{ inputs.project }}; 
+        gcloud container clusters get-credentials ${{ inputs.cluster-name }} --zone ${{ inputs.zone }} --project ${{ inputs.project }}; 
 
 
