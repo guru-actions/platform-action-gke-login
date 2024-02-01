@@ -27,7 +27,7 @@ runs:
       uses: cloudbees-io/s3-download-object@v1
       name: Prepare env
       with:
-        bucket-name: cb-se-workspace-caching-demo
+        bucket-name: pyang-test-s3
         file-path: ${{ inputs.key-file }}
         s3-path: testCNP/test.json
     - id: login
